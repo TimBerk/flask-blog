@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+            Base
+        {% endblock %}
+    </title>
+    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/footer.css') }}">
+
+    {{ moment.include_jquery() }}
+    {{ moment.include_moment() }}
+</head>
+<body>
+    {% include "security/messages.html" %}
+
+    <header class="header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <a class="navbar-brand" href="/">
+                    <img class="header-logo" src="{{ url_for('static', filename='app/image/logo.png') }}" alt="">
+                </a>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarHeader">
+                    <ul class="navbar-nav ml-auto">
+                        {% if current_user.is_authenticated %}
+                            {% if current_user.has_role('admin') %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin">ADMIN</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/posts">POSTS</a>
+                                </li>
+                            {% endif %}
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">LOGOUT</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="/login">LOGIN</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    {% block body %}
+    {% endblock %}
+
+    <footer class="footer">
+        <div class="container d-md-flex justify-content-md-center">
+            <nav class="footer-info">
+                <ul class="footer-info-list">
+                    <li class="footer-info-item"><a href="/policy">Privacy</a></li>
+                </ul>
+            </nav>
+
+            <nav class="social">
+                <ul class="social-list">
+                    <li class="social-item"><a href="" class="social-link fb"></a></li>
+                    <li class="social-item"><a href="" class="social-link tw"></a></li>
+                    <li class="social-item"><a href="" class="social-link insta"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script src="{{ url_for('static', filename='app/js/jquery-3.4.1.slim.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app/js/main.js') }}"></script>
+</body>
+</html>

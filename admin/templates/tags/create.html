@@ -1,0 +1,58 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+  Добавление тега
+{% endblock %}
+
+{% block body %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Теги</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+      <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Добавление тега</h6>
+          </div>
+          <div class="card-body">
+            
+
+            <form class="user" action="{{ url_for('tags.create') }}" method="POST" enctype="multipart/form-data">
+              {{ form.csrf_token }}
+
+              {% for field in form %}
+
+              <div class="form-group">
+                {% if field.type == "RadioField" %}
+                  {{ field.label() }}
+
+                  {% for subfield in field %}
+                    <div class="custom-control custom-radio mb-2">
+                      {{ subfield(class='custom-control-input') }}
+
+                      {{ subfield.label(class='custom-control-label badge badge-'+subfield.label.text) }}
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  {{ field.label() }}
+                  {{ field(class='form-control') }}
+                {% endif %}
+              </div>
+
+              {% endfor %}
+
+              <button class="btn btn-primary btn-user btn-block">Сохранить</button>
+            
+            </form>
+
+            {{ ckeditor.load() }}
+            {{ ckeditor.config(name='body') }}
+
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+  {{ post.title }}
+{% endblock %}
+
+{% block body %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Пост</h1>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+      <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary float-left">{{ post.title }}</h6>
+
+            <div class="float-right">
+              <a href="{{ url_for('posts.index') }}" class="btn btn-primary btn-sm btn-icon-split">
+                <span class="icon text-white">
+                  <i class="fas fa-undo-alt"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="card-body">
+            {% if post.tags %}
+              <div class="mb-2">
+                {% for tag in post.tags %}
+                  <span class="badge badge-{{tag.get_color()}}">{{tag.name}}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if post.photo %}
+              <img class="img-fluid text-center mt-3 mb-4" style="width: 25rem;"
+                  src="/static/{{ post.photo }}" alt="{{post.title}}">
+            {% endif %}
+            
+            {{ post.text|safe }}
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}

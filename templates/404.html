@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>404</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='app/css/style.css') }}">
+</head>
+<body>
+    <div class="page-wrap d-flex flex-row align-items-center" style="min-height: 100vh">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-12 text-center">
+                    <span class="display-1 d-block">404</span>
+                    <div class="mb-4 lead">The page you are looking for was not found.</div>
+                    <a href="/" class="btn btn-link">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='app/js/jquery-3.4.1.slim.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app/js/popper.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='app/js/bootstrap.min.js') }}"></script>
+</body>
+</html>

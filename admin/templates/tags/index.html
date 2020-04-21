@@ -1,0 +1,80 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}
+    Теги
+{% endblock %}
+
+{% block body %}
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+      <h1 class="h3 mb-0 text-gray-800">Теги</h1>
+      <a href="{{ url_for('tags.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-download fa-sm text-white-50"></i> Добавить тег
+      </a>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+      <table class="table col-lg-6">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Цвет</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for tag in pages.items %}
+          <tr>
+            <th scope="row">{{ tag.id }}</th>
+            <td>{{ tag.name }}</td>
+            <td>
+              <span class="btn btn-{{ tag.get_color() }} btn-circle btn-sm"></span>
+            </td>
+            <td>
+              <div class="btn-group btn-group-sm float-right" role="group" aria-label="...">
+                <a href="{{ url_for('tags.edit', id=tag.id) }}" class="btn btn-warning btn-sm btn-icon-split">
+                  <span class="text-white">
+                    <i class="fas fa-edit"></i>
+                  </span>
+                </a>
+    
+                <a href="{{ url_for('tags.delete', id=tag.id) }}" class="btn btn-danger btn-sm btn-icon-split">
+                  <span class="text-white">
+                    <i class="fas fa-trash-alt"></i>
+                  </span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+        </table>
+
+      <nav class="col-lg-12 mb-4">
+        <ul class="pagination">
+
+          <li {% if not pages.has_prev %}class="page-item disabled"{% else %}class="page-item"{% endif %}>
+            <a class="page-link" href="./?page={{ pages.prev_num }}">
+              <span aria-hidden="true">&laquo;</span>
+              <span class="sr-only">Previous</span>
+            </a>
+          </li>
+
+          {% for page in pages.iter_pages() %}
+            <li {% if page == pages.page %}class="page-item active"{% else %}class="page-item"{% endif %}>
+              <a class="page-link" href="./?page={{ page }}">{{ page }}</a>
+            </li>
+          {% endfor %}
+
+          <li {% if not pages.has_next %}class="page-item disabled"{% else %}class="page-item"{% endif %}>
+            <a class="page-link" href="./?page={{ pages.next_num }}">
+              <span aria-hidden="true">&raquo;</span>
+              <span class="sr-only">Next</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+{% endblock %}

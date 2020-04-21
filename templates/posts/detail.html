@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ post.title }}
+{% endblock %}
+
+{% block body %}
+  <main>
+    <section class="container single-post">
+        <h2 class="d-none">{{ post.title }}</h2>
+
+        <article class="card post-main">
+            {% if post.photo %}
+                <div class="card-img-top">
+                    <img class="img-fluid" src="/static/{{ post.photo }}" alt="{{post.title}}">
+                </div>
+            {% endif %}
+
+            <div class="card-body">
+              {% if post.tags %}
+                  <div class="mb-2">
+                  {% for tag in post.tags %}
+                      <a href="{{ url_for('user_posts.tag', slug=tag.slug) }}" class="badge badge-{{tag.get_color()}}">
+                          {{tag.name}}
+                      </a>
+                  {% endfor %}
+                  </div>
+              {% endif %}
+
+              {% if post.category %}
+                  <a class="post-category" href="{{ url_for('user_posts.category', slug=post.category.slug) }}">
+                      {{ post.category.name }}
+                  </a>
+              {% endif %}
+
+                <h3 class="post-title">
+                    {{ post.title }}
+                </h3>
+
+                {{ post.text|safe }}
+
+            </div>
+        </article>
+    </section>
+
+    <section class="posts-another">
+        <h2 class="d-none">Another posts</h2>
+
+        <div class="container">
+            <div class="posts-another-content row">
+                <h3 class="posts-another-header col-12 text-xs-center">last posts</h3>
+
+                {% for another_post in posts %}
+                <article class="card col-12 col-md-4">
+                  {% if another_post.photo %}
+                    <img class="card-img-top img-fluid" src="/static/{{ another_post.photo }}" alt="{{another_post.title}}">
+                  {% endif %}
+
+                    <h4 class="posts-another-name">
+                      <a href="{{ url_for('user_posts.detail', slug=another_post.slug) }}">{{another_post.title}}</a>
+                    </h4>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="comments container">
+        <h2 class="d-none">Comments</h2>
+            <div class="comments-content">
+                <span class="comments-header">{{ post.comments|length }} Comments</span>
+
+                {% for comment in post.comments %}
+                <div class="media">
+                    <img src="/static/app/image/user3.png" class="mr-5" alt="Photo of user">
+                    <div class="media-body">
+                        <h5 class="mt-0 comment-user">{{ comment.author.username }}</h5>
+                        <p class="comment-text">
+                            {{ comment.text|safe }}
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if current_user.is_authenticated %}
+                <div class="media">
+                    <img src="/static/app/image/user3.png" class="mr-5" alt="Photo of user">
+                    <div class="media-body">
+                        <form class="edit" action="{{ url_for('user_posts.detail', slug=post.slug) }}" method="POST">
+                            {{ form.csrf_token }}
+                  
+                            {% for field in form %}
+                  
+                            <div class="form-group">
+                                {{ field(class='comment-field-text') }}
+                            </div>
+                  
+                            {% endfor %}
+                  
+                            <button class="btn btn-primary btn-user btn-block">Отправить</button>
+                        </form>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+    </section>
+  </main>
+
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='body') }}
+{% endblock %}

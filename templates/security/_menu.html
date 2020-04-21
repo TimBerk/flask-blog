@@ -1,0 +1,26 @@
+{% if security.registerable or security.recoverable or security.confirmable %}
+<div class="btn-group" role="group" aria-label="Basic example">
+  <a class="btn btn-secondary" href="{{ url_for_security('login') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">
+    <i class="fas fa-sign-in-alt"></i> Войти
+  </a>
+
+  {% if security.registerable %}
+  <a class="btn btn-secondary" href="{{ url_for_security('register') }}{% if 'next' in request.args %}?next={{ request.args.next|urlencode }}{% endif %}">
+    <i class="fas fa-plus"></i> Регистрация
+  </a>
+  {% endif %}
+
+  {% if security.recoverable %}
+    <a class="btn btn-secondary" href="{{ url_for_security('forgot_password') }}">
+      <i class="fas fa-key"></i> {{ _('Forgot password') }}
+    </a>
+  {% endif %}
+
+  {% if security.confirmable %}
+    <a class="btn btn-secondary" href="{{ url_for_security('send_confirmation') }}">
+      <i class="far fa-check-circle"></i> {{ _('Confirm account') }}
+    </a>
+  {% endif %}
+</div>
+
+{% endif %}

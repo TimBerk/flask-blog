@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Добавление поста
+{% endblock %}
+
+{% block body %}
+
+{% include '_toasts.html' %}
+
+<main>
+  <section class="container single-post">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Добавление поста</h6>
+      </div>
+      <div class="card-body">
+        <form class="edit" action="{{ url_for('user_posts.create') }}" method="POST" enctype="multipart/form-data">
+          {{ form.csrf_token }}
+
+          {% for field in form %}
+
+          <div class="form-group">
+            {% if field.type == "BooleanField" %}
+              <div class="custom-control custom-checkbox">
+                {{ field(class='custom-control-input') }}
+                {{ field.label(class='custom-control-label') }}
+              </div>
+            {% elif field.type == "QuerySelectMultipleField" %}
+              {{ field.label(class='form-control-file') }}
+
+              {% for subfield in field %}
+                <div class="custom-control custom-checkbox">
+                  {{ subfield(class='custom-control-input') }}
+                  {{ subfield.label(class='custom-control-label') }}
+                </div>
+              {% endfor %}
+            {% elif field.type == "FileField" %}
+                {{ field.label(class='form-control-file') }}
+                {{ field() }}
+            {% else %}
+              {{ field.label() }}
+              {{ field(class='form-control') }}
+            {% endif %}
+          </div>
+
+          {% endfor %}
+
+          <button class="btn btn-primary btn-user btn-block">Сохранить</button>
+        </form>
+
+        {{ ckeditor.load() }}
+        {{ ckeditor.config(name='body') }}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

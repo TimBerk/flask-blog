@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Index page
+{% endblock %}
+
+{% block body %}
+    <main>
+        <section class="container posts">
+            <h2 class="d-none">Main posts</h2>
+
+            {% if main_post %}
+            <article class="card post-main">
+                {% if main_post.photo %}
+                    <div class="card-img-top">
+                        <img class="img-fluid" src="/static/{{ main_post.photo }}" alt="{{main_post.title}}">
+                    </div>
+                {% endif %}
+
+                <div class="card-body">
+                    {% if main_post.tags %}
+                        <div class="mb-2">
+                        {% for tag in main_post.tags %}
+                            <a href="{{ url_for('user_posts.tag', slug=tag.slug) }}" class="badge badge-{{tag.get_color()}}">
+                                {{tag.name}}
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if main_post.category %}
+                        <a class="post-category" href="{{ url_for('user_posts.category', slug=main_post.category.slug) }}">
+                            {{ main_post.category.name }}
+                        </a>
+                    {% endif %}
+
+                    <h3 class="post-title">
+                        <a href="{{ url_for('user_posts.detail', slug=main_post.slug) }}" class="post-link">
+                            {{main_post.title}}
+                        </a>
+                    </h3>
+
+                    <p class="card-text">{{ main_post.text|striptags|truncate(1000) }}</p>
+
+                    <a class="post-comment-link" href="#">Leave a comment</a>
+                </div>
+            </article>
+            {% endif %}
+
+            {% if posts %}
+            <div class="row post-wrapper">
+                {% for post in posts %}
+                    <article class="card post col-xs-12 col-lg-6">
+                        {% if post.photo %}
+                            <div class="card-img-top">
+                                <img class="img-fluid" src="/static/{{ post.photo }}" alt="{{post.title}}">
+                            </div>
+                        {% endif %}
+
+                        <div class="card-body">
+                            {% if post.tags %}
+                                <div class="mb-2">
+                                {% for tag in post.tags %}
+                                    <a href="{{ url_for('user_posts.tag', slug=tag.slug) }}" class="badge badge-{{tag.get_color()}}">
+                                        {{tag.name}}
+                                    </a>
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+
+                            {% if post.category %}
+                                <a class="post-category" href="{{ url_for('user_posts.category', slug=post.category.slug) }}">
+                                    {{ post.category.name }}
+                                </a>
+                            {% endif %}
+
+                            <h3 class="post-title">
+                                <a class="post-link" href="{{ url_for('user_posts.detail', slug=post.slug) }}">
+                                    {{ post.title }}
+                                </a>
+                            </h3>
+
+                            <p class="card-text">{{ post.text|striptags|truncate(150) }}</p>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </section>
+    </main>
+{% endblock %}
