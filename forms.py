@@ -3,7 +3,7 @@ import os
 from flask import request, flash
 from werkzeug.utils import secure_filename
 
-from wtforms import Form, StringField, BooleanField, widgets
+from wtforms import Form, StringField, BooleanField, PasswordField, widgets
 from wtforms.ext.sqlalchemy.fields import QuerySelectMultipleField, QuerySelectField
 from flask_ckeditor import CKEditorField
 from flask_wtf.file import FileField, FileAllowed
@@ -79,3 +79,9 @@ class PostForm(Form):
 
 class CommentForm(Form):
     text = CKEditorField('Комментарий')
+
+
+class UserForm(Form):
+    username = StringField('Логин')
+    email = StringField('Email')
+    password = PasswordField('Пароль')

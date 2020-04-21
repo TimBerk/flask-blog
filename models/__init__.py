@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from shared import db
 
 from .role import Role

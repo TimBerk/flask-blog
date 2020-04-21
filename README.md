@@ -5,7 +5,7 @@
 
 ## Installation
 
-Перед установкой вам необходимо создать базу данных MySQL и записать настройки в config.py
+Перед запуском вам необходимо создать базу данных MySQL и записать настройки в config.py
 
 ```console
 git clone https://github.com/TimBerk/flask-blog
@@ -25,3 +25,25 @@ python main.py
 * [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/) - The extension adds support for SQLAlchemy.
 * [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/) - The extension integrations WTForms, including CSRF, file upload.
 * [Flask-WTF](https://flask-wtf.readthedocs.io/en/stable/) - The extension integrations WTForms, including CSRF, file upload.
+
+
+## Features
+
+### Admin backend
+
+* Beautiful and open source dashboard theme for backend SB Admin 2
+* Content management components: posts, categories, tags
+* Users, Roles
+
+### Users
+
+* Sign in
+* Sign up
+* Profile editing(personal data)
+
+## Demo User
+
+```
+Login: admin@admin.ru
+Password: admin
+```

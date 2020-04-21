@@ -1,7 +1,12 @@
-from flask import render_template
+from flask import render_template, request
+from flask import redirect, url_for
+from flask_security import login_required, roles_required
+from flask_login import current_user
 
-from models.post import Post
+from forms import UserForm
+from models import Post, User
 from app import app
+from shared import db
 
 
 @app.route('/')
@@ -33,3 +38,19 @@ def policy():
 @app.route('/contacts')
 def contacts():
     return render_template('app/contacts.html')
+
+
+@app.route('/profile')
+@login_required
+@roles_required('user')
+def profile():
+    user = User.query.filter(User.id == current_user.id).first()
+
+    if request.method == 'POST':
+        form = UserForm(formdata=request.form, obj=user)
+        form.populate_obj(user)
+        db.session.commit()
+        return redirect(url_for('users.index'))
+
+    form = UserForm(obj=user)
+    return render_template('app/profile.html', user=user, form=form)

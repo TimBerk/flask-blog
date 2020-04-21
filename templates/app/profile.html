@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ user.username }}
+{% endblock %}
+
+{% block body %}
+<main>
+  <section class="container single-post">
+
+    <div class="card shadow mb-4">
+
+      <div class="card-body">
+            <form class="edit" action="{{ url_for('profile') }}" method="POST">
+              {{ form.csrf_token }}
+
+              {% for field in form %}
+
+              <div class="form-group">
+                {{ field.label() }}
+                {{ field(class='form-control') }}
+              </div>
+
+              {% endfor %}
+
+              <button class="btn btn-primary btn-user btn-block">Сохранить</button>
+            
+            </form>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

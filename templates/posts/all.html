@@ -1,55 +1,17 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Flask blog
+    All posts
 {% endblock %}
 
 {% block body %}
     <main>
         <section class="container posts">
-            <h2 class="d-none">Main posts</h2>
+            <h2 class="d-none">All posts</h2>
 
-            {% if main_post %}
-            <article class="card post-main">
-                {% if main_post.photo %}
-                    <div class="card-img-top">
-                        <img class="img-fluid" src="/static/{{ main_post.photo }}" alt="{{main_post.title}}">
-                    </div>
-                {% endif %}
-
-                <div class="card-body">
-                    {% if main_post.tags %}
-                        <div class="mb-2">
-                        {% for tag in main_post.tags %}
-                            <a href="{{ url_for('user_posts.tag', slug=tag.slug) }}" class="badge badge-{{tag.get_color()}}">
-                                {{tag.name}}
-                            </a>
-                        {% endfor %}
-                        </div>
-                    {% endif %}
-
-                    {% if main_post.category %}
-                        <a class="post-category" href="{{ url_for('user_posts.category', slug=main_post.category.slug) }}">
-                            {{ main_post.category.name }}
-                        </a>
-                    {% endif %}
-
-                    <h3 class="post-title">
-                        <a href="{{ url_for('user_posts.detail', slug=main_post.slug) }}" class="post-link">
-                            {{main_post.title}}
-                        </a>
-                    </h3>
-
-                    <p class="card-text">{{ main_post.text|striptags|truncate(1000) }}</p>
-
-                    <a class="post-comment-link" href="#">Leave a comment</a>
-                </div>
-            </article>
-            {% endif %}
-
-            {% if posts %}
+            {% if pages.items %}
                 <div class="row post-wrapper">
-                    {% for post in posts %}
+                    {% for post in pages.items %}
                         <article class="card post col-xs-12 col-lg-6">
                             {% if post.photo %}
                                 <div class="card-img-top">
@@ -86,14 +48,31 @@
                     {% endfor %}
                 </div>
             {% endif %}
-        </section>
 
-        {% if posts|length == 6 %}
-        <section class="last-posts container">
-            <div class="post-load">
-                <a class="post-load-link" href="{{ url_for('user_posts.index') }}">Load more</a>
-            </div>
+            <nav class="container mb-4">
+                <ul class="pagination">
+      
+                  <li {% if not pages.has_prev %}class="page-item disabled"{% else %}class="page-item"{% endif %}>
+                    <a class="page-link" href="./?page={{ pages.prev_num }}">
+                      <span aria-hidden="true">&laquo;</span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                  </li>
+      
+                  {% for page in pages.iter_pages() %}
+                    <li {% if page == pages.page %}class="page-item active"{% else %}class="page-item"{% endif %}>
+                      <a class="page-link" href="./?page={{ page }}">{{ page }}</a>
+                    </li>
+                  {% endfor %}
+      
+                  <li {% if not pages.has_next %}class="page-item disabled"{% else %}class="page-item"{% endif %}>
+                    <a class="page-link" href="./?page={{ pages.next_num }}">
+                      <span aria-hidden="true">&raquo;</span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                  </li>
+                </ul>
+            </nav>
         </section>
-        {% endif %}
     </main>
 {% endblock %}

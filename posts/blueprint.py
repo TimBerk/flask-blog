@@ -5,6 +5,7 @@ from flask import request, flash
 from flask import redirect, url_for
 from flask_security import login_required, roles_required
 from flask_login import current_user
+from sqlalchemy import and_
 
 from models import Post, Comment
 from forms import CommentForm, PostForm, enabled_tags
@@ -20,9 +21,9 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in app.config['ALLOWED_EXTENSIONS']
 
 
-@user_posts.route('/')
+@user_posts.route('/my')
 @login_required
-def index():
+def my():
     page = request.args.get('page')
 
     if page and page.isdigit():
@@ -36,6 +37,21 @@ def index():
     return render_template('posts/index.html', pages=pages)
 
 
+@user_posts.route('/')
+def index():
+    page = request.args.get('page')
+
+    if page and page.isdigit():
+        page = int(page)
+    else:
+        page = 1
+
+    posts = Post.query.filter(Post.is_published == 1).order_by(Post.id.desc())
+    pages = posts.paginate(page=page, per_page=5)
+
+    return render_template('posts/all.html', pages=pages)
+
+
 @user_posts.route('/category/<slug>')
 def category(slug):
     page = request.args.get('page')
@@ -45,7 +61,8 @@ def category(slug):
     else:
         page = 1
 
-    posts = Post.query.join(Post.category).filter_by(Post.is_published == 1, slug=slug).order_by(Post.id.desc())
+    posts = Post.query.join(Post.category).filter(and_(Post.is_published == 1), (Post.slug == slug))\
+        .order_by(Post.id.desc())
     pages = posts.paginate(page=page, per_page=5)
 
     return render_template('posts/category.html', pages=pages)
@@ -60,7 +77,8 @@ def tag(slug):
     else:
         page = 1
 
-    posts = Post.query.join(Post.tags).filter_by(Post.is_published == 1, slug=slug).order_by(Post.id.desc())
+    posts = Post.query.join(Post.tags).filter(and_(Post.is_published == 1), (Post.slug == slug))\
+        .order_by(Post.id.desc())
     pages = posts.paginate(page=page, per_page=5)
 
     return render_template('posts/category.html', pages=pages)
@@ -88,7 +106,7 @@ def create():
             )
             db.session.add(post)
             db.session.commit()
-            return redirect(url_for('user_posts.index'))
+            return redirect(url_for('user_posts.my'))
         except Exception as exc:
             db.session.rollback()
             flash(exc.message, 'danger')
@@ -131,11 +149,11 @@ def delete(id):
 
     if post is None:
         flash('Данный пост не существует', 'danger')
-        return redirect(url_for('user_posts.index'))
+        return redirect(url_for('user_posts.my'))
 
     if not post.is_owner():
         flash('Вы можете редактировать только свои посты', 'danger')
-        return redirect(url_for('user_posts.index'))
+        return redirect(url_for('user_posts.my'))
 
     os.remove(os.path.join(app.config['UPLOAD_FOLDER'], post.photo))
     post.delete()
@@ -145,7 +163,7 @@ def delete(id):
 
 @user_posts.route('/<slug>', methods=['POST', 'GET'])
 def detail(slug):
-    post = Post.query.filter(Post.is_published == 1, Post.slug == slug).first()
+    post = Post.query.filter(and_(Post.is_published == 1), (Post.slug == slug)).first()
     posts = Post.query.filter(Post.slug != slug).order_by(Post.id.desc()).limit(3)
 
     if request.method == 'POST' and current_user.is_authenticated:
