@@ -8,7 +8,7 @@
 Перед запуском вам необходимо создать базу данных MySQL и записать настройки в config.py
 
 ```console
-git clone https://github.com/TimBerk/flask-blog
+git clone --recursive https://github.com/TimBerk/flask-blog
 cd flask-blog
 pip install -r requirements.txt
 python db_init.py
