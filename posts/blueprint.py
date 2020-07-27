@@ -7,7 +7,7 @@ from flask_security import login_required, roles_required
 from flask_login import current_user
 from sqlalchemy import and_
 
-from models import Post, Comment
+from models import Post, Comment, Category, Tag
 from forms import CommentForm, PostForm, enabled_tags
 
 from shared import db
@@ -61,7 +61,7 @@ def category(slug):
     else:
         page = 1
 
-    posts = Post.query.join(Post.category).filter(and_(Post.is_published == 1), (Post.slug == slug))\
+    posts = Post.query.join(Post.category).filter(and_(Post.is_published == 1), (Category.slug == slug))\
         .order_by(Post.id.desc())
     pages = posts.paginate(page=page, per_page=5)
 
@@ -77,7 +77,7 @@ def tag(slug):
     else:
         page = 1
 
-    posts = Post.query.join(Post.tags).filter(and_(Post.is_published == 1), (Post.slug == slug))\
+    posts = Post.query.join(Post.tags).filter(and_(Post.is_published == 1), (Tag.slug == slug))\
         .order_by(Post.id.desc())
     pages = posts.paginate(page=page, per_page=5)
 
