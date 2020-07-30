@@ -1,0 +1,3 @@
+[submodule "project/static/app"]
+	path = project/static/app
+	url = https://github.com/TimBerk/front-blog.git
