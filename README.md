@@ -12,8 +12,15 @@ git clone --recursive https://github.com/TimBerk/flask-blog
 cd flask-blog/project
 pip install -r requirements.txt
 python db_init.py
-python main.py
+set FLASK_APP=main.py
+flask run
 ```
+
+## Docker
+
+1. Установите docker в вашей ОС
+2. Для построения нового образа выполните команду ``docker build . -t blog``
+3. Для создания нового контейнера выполните команду ``docker-compose up``
 
 ## Built With
 
