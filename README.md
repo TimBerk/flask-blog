@@ -9,7 +9,7 @@
 
 ```console
 git clone --recursive https://github.com/TimBerk/flask-blog
-cd flask-blog
+cd flask-blog/project
 pip install -r requirements.txt
 python db_init.py
 python main.py

@@ -8,4 +8,4 @@ __pycache__/
 .vscode
 
 # Folders
-static/photos/
+project/static/photos/
