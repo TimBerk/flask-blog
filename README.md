@@ -5,7 +5,7 @@
 
 ## Installation
 
-Перед запуском вам необходимо создать базу данных MySQL и записать настройки в config.py
+Перед запуском вам необходимо создать базу данных MySQL и записать настройки в config.py и .env
 
 ```console
 git clone --recursive https://github.com/TimBerk/flask-blog
@@ -21,6 +21,7 @@ flask run
 1. Установите docker в вашей ОС
 2. Для построения нового образа выполните команду ``docker build . -t blog``
 3. Для создания нового контейнера выполните команду ``docker-compose up``
+4. При первом запуске docker в консоли приложения необходимо инициализировать стартовые данные ``python db_init.py``
 
 ## Built With
 
